@@ -1,5 +1,6 @@
 'use strict';
 
+const n = 10;
 let randomNum;
 
 const isNumber = function (num) {
@@ -10,26 +11,44 @@ function getRandomNum() {
   return Math.floor(Math.random() * 100)
 }
 
-const startGame = function (randomNum) {
+const gameReload = function () {
+  randomNum = getRandomNum();
+  startGame(randomNum, n)
+}
+
+const startGame = function (randomNum, n) {
   const game = function () {
-    let userNum = prompt('Угадай число от 1 до 100');
-    if (userNum === null) {
-      alert('Игра окончена');
-    } else {
-      if (isNumber(userNum)) {
-        userNum = +userNum;
-        if (randomNum === userNum) {
-          alert('Поздравляю, Вы угадали!!!');
-          return userNum
-        } else if (randomNum < userNum) {
-          alert('Загаданное число меньше')
-        } else {
-          alert('Загаданное число больше')
-        }
+    if (n > 0) {
+      let userNum = prompt('Угадай число от 1 до 100');
+      if (userNum === null) {
+        alert('Игра окончена');
       } else {
-        alert('Введите число!')
+        if (isNumber(userNum)) {
+          userNum = +userNum;
+          n--;
+          if (randomNum === userNum) {
+            if (confirm('Поздравляю, Вы угадали!!! Хотели бы сыграть еще?')) {
+              gameReload()
+            } else {
+              alert('Игра окончена');
+              return
+            }
+          } else if (randomNum < userNum) {
+            alert(`Загаданное число меньше, осталось ${n} попыток`)
+          } else {
+            alert(`Загаданное число больше, осталось ${n} попыток`)
+          }
+        } else {
+          alert('Введите число!')
+        }
+        game()
       }
-      game()
+    } else {
+      if (confirm('Попытки закончились, хотите сыграть еще?')) {
+        gameReload()
+      } else {
+        alert('Игра окончена')
+      }
     }
   }
   game()
@@ -37,5 +56,5 @@ const startGame = function (randomNum) {
 
 randomNum = getRandomNum();
 
-startGame(randomNum)
+startGame(randomNum, n)
 
